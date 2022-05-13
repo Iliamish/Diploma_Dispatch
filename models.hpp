@@ -9,13 +9,12 @@ namespace models {
     {
         std::string to_id;
         std::size_t weight;
+        double acceptance_rate;
     };
 
     struct Contractor
     {
         std::string id;
-        double acceptance_rate;
-
     };
 
     struct Order

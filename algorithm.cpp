@@ -1,4 +1,5 @@
 #include <unordered_map>
+#include <iostream>
 
 #include "algorithm.hpp"
 #define INF 1000000
@@ -7,7 +8,7 @@ namespace algorithm {
 
 namespace {
 void AddZeros(std::vector<std::vector<int>>& matrix) {
-    for(int i = 0; i < matrix.size(); ++i){
+    for(std::size_t i = 0; i < matrix.size(); ++i){
         matrix[i].insert(matrix[i].begin(),0);
     }
     matrix.insert(matrix.begin(), std::vector<int>(matrix[0].size(), 0));
@@ -22,7 +23,7 @@ std::vector<int> HungarianImpl(std::vector<std::vector<int>> matrix){
     std::vector<int> pairs(n);
     std::vector<int> path(m);
 
-    for(int i = 1; i < matrix.size(); ++i){
+    for(std::size_t i = 1; i < matrix.size(); ++i){
         pairs[0] = i;
         int j0 = 0;
         std::vector<int> minj(m, INF);
@@ -65,12 +66,13 @@ std::vector<int> HungarianImpl(std::vector<std::vector<int>> matrix){
 
     std::vector<int> ans (n);
     for (int j = 0; j < m ; ++j)
-        ans[pairs[j]] = j;
+        ans[pairs[j]] = j - 1;
 
+    ans.erase(ans.begin());
     return ans;
 }
 
-std::vector<models::ContractorsUnion> PreprocessUnions(std::string order_id);
+// std::vector<models::ContractorsUnion> PreprocessUnions(std::string order_id);
 
 
 std::vector<std::vector<int>> PreprocessMatrix(
@@ -84,7 +86,7 @@ std::vector<std::vector<int>> PreprocessMatrix(
         contractors_map.emplace(contractors[j].id, j);
     }
 
-    std::vector<std::vector<int>> result(N, std::vector<int>(M));
+    std::vector<std::vector<int>> result(N, std::vector<int>(M, INF));
     for (std::size_t i = 0; i < N; ++i) {
         for(const auto& edge_to_contractor : orders[i].edges_to_contractors) {
             const std::size_t j = contractors_map.at(edge_to_contractor.to_id);
@@ -99,14 +101,28 @@ std::vector<std::vector<int>> PreprocessMatrix(
 
 
 std::vector<std::pair<models::Order, models::Contractor>>
-    SolveEasyHungarian(const std::vector<models::Order>&,
-                                const std::vector<models::Contractor>&){
-    
+    SolveEasyHungarian(const std::vector<models::Order>& orders,
+                                const std::vector<models::Contractor>& contractors){
+    const auto preproced_matrix = PreprocessMatrix(orders, contractors);
+    const auto result_pairs = HungarianImpl(preproced_matrix);
+
+    std::vector<std::pair<models::Order, models::Contractor>> orders_contractors;
+    for(std::size_t i = 0; i < result_pairs.size(); ++i){
+        orders_contractors.push_back({orders[i], contractors[result_pairs[i]]});
+    }
+    return orders_contractors;
 }
 
 std::vector<std::pair<models::Order, models::ContractorsUnion>>
-    SolveHungarianUnions(const std::vector<models::Order>&,
-                                const std::vector<models::Contractor>&);
+    SolveHungarianUnions(const std::vector<models::Order>& orders,
+                                const std::vector<models::Contractor>& contractors) {
+    if (orders.size() < 2 * contractors.size()) {
+        std::cerr << "This solution are not optimized for current set of orders and contractors";
+    }
+
+    std::vector<std::pair<models::Order, models::ContractorsUnion>> orders_contractors;
+    return orders_contractors;
+}
 
 std::vector<std::pair<models::Order, models::ContractorsUnion>>
     SolveGreedy(const std::vector<models::Order>&,
