@@ -1,39 +1,41 @@
 #include <iostream>
+#include <stdlib.h>
 
 #include "imitation.hpp"
 #include "models.hpp"
+#include "utils.hpp"
+
 
 namespace {
-    
+    void BuildData(std::string path, models::Graph& graph) {
+        auto json_value = utils::ParseFile(path.c_str());
+        std::unordered_set<std::string> candidates_set;
+        for(auto json_order : json_value["orders"]) {
+            models::Order order;
+            order.id = json_order["id"].asString();
+            for(auto json_candidate : json_order["candidates"]) {
+                models::Edge edge;
+                candidates_set.emplace(json_candidate["id"].asString());
+                edge.to_id = json_candidate["id"].asString();
+                edge.weight = json_candidate["score"].asInt();
+                order.edges_to_contractors.push_back(edge);
+            }
+            graph.orders.push_back(order);
+        }
+        for(auto& candidate_id : candidates_set) {
+            graph.contractors.push_back(models::Contractor{candidate_id});
+        }
+    }
 }
 
 namespace imitation {
 
     std::chrono::milliseconds ImitateEasy() {
-        models::Contractor contractor1{"driver1"};
-        models::Contractor contractor2{"driver2"};
-        models::Contractor contractor3{"driver3"};
-
-        models::Edge edge1_1{"driver1", 3, 0.8};
-        models::Edge edge1_2{"driver2", 1, 0.9};
-        models::Edge edge1_3{"driver3", 2, 0.7};
-        models::Order order1{"order1", std::vector<models::Edge>{edge1_1, edge1_2, edge1_3}};
-
-        models::Edge edge2_1{"driver1", 3, 0.5};
-        models::Edge edge2_2{"driver2", 2, 0.9};
-        models::Edge edge2_3{"driver3", 1, 0.6};
-        models::Order order2{"order2", std::vector<models::Edge>{edge2_1, edge2_2, edge2_3}};
-
-        models::Edge edge3_1{"driver1", 1, 0.8};
-        models::Edge edge3_2{"driver2", 2, 0.9};
-        models::Edge edge3_3{"driver3", 3, 0.7};
-        models::Order order3{"order3", std::vector<models::Edge>{edge3_1, edge3_2, edge3_3}};
-
-        std::vector<models::Contractor> contractors{contractor1, contractor2, contractor3};
-        std::vector<models::Order> orders{order1, order2, order3};
+        models::Graph graph;
+        BuildData("data1.json", graph);
 
         auto s_time = std::chrono::steady_clock::now();
-        auto result = algorithm::SolveEasyHungarian(orders, contractors);
+        auto result = algorithm::SolveEasyHungarian(graph);
         auto elapsed_time = std::chrono::steady_clock::now() - s_time;
 
         for (auto pair : result)
@@ -41,6 +43,44 @@ namespace imitation {
             std::cout << pair.first.id << " -- " << pair.second.id << std::endl;
         }
         
+        return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    }
+
+    std::chrono::milliseconds ImitateIterative() {
+        models::Graph graph;
+        BuildData("data1.json", graph);
+
+        auto s_time = std::chrono::steady_clock::now();
+        auto result = algorithm::SolveHungarianUnions(graph);
+        auto elapsed_time = std::chrono::steady_clock::now() - s_time;
+
+        for (auto pair : result)
+        {
+            for(auto cand : pair.second.contractors)
+                std::cout << pair.first.id << " -- " << cand.id << std::endl;
+
+            std::cout << "\n" << std::endl;
+        }
+
+        return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    }
+
+    std::chrono::milliseconds ImitateGreedy() {
+        models::Graph graph;
+        BuildData("data1.json", graph);
+
+        auto s_time = std::chrono::steady_clock::now();
+        auto result = algorithm::SolveGreedy(graph);
+        auto elapsed_time = std::chrono::steady_clock::now() - s_time;
+
+        for (auto pair : result)
+        {
+            for(auto cand : pair.second.contractors)
+                std::cout << pair.first.id << " -- " << cand.id << std::endl;
+
+            std::cout << "\n" << std::endl;
+        }
+
         return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
     }
 

@@ -5,14 +5,11 @@
 namespace algorithm {
 
     std::vector<std::pair<models::Order, models::Contractor>>
-        SolveEasyHungarian(const std::vector<models::Order>&,
-                                    const std::vector<models::Contractor>&);
+        SolveEasyHungarian(const models::Graph& graph);
 
     std::vector<std::pair<models::Order, models::ContractorsUnion>>
-        SolveHungarianUnions(const std::vector<models::Order>&,
-                                    const std::vector<models::Contractor>&);
+        SolveHungarianUnions(models::Graph graph);
 
     std::vector<std::pair<models::Order, models::ContractorsUnion>>
-        SolveGreedy(const std::vector<models::Order>&,
-                                    const std::vector<models::Contractor>&);
+        SolveGreedy(models::Graph graph);
 }

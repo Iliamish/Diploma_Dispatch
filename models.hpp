@@ -3,6 +3,8 @@
 #include <chrono>
 #include <string>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
 
 namespace models {
     struct Edge
@@ -26,6 +28,11 @@ namespace models {
     struct ContractorsUnion
     {
         double acceptance_rate;
+        std::vector<Contractor> contractors;
+    };
+
+    struct Graph {
+        std::vector<Order> orders;
         std::vector<Contractor> contractors;
     };
 }
