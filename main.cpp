@@ -3,6 +3,7 @@
 #include "models.hpp"
 #include "imitation.hpp"
 
+
 int main() {
     std::cout << "Easy algorithm solution: " << std::endl;
     auto time = imitation::ImitateEasy();

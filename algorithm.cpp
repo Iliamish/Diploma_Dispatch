@@ -14,9 +14,19 @@ void AddZeros(std::vector<std::vector<int>>& matrix) {
 }
 
 std::vector<int> HungarianImpl(std::vector<std::vector<int>> matrix){
-    AddZeros(matrix);
     int n = matrix.size();
     int m = matrix[0].size();
+    int real_border = m;
+    if (n > m) {
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n - m; ++j) {
+                matrix[i].push_back(INF);
+            }
+        }
+    }
+    AddZeros(matrix);
+    n = matrix.size();
+    m = matrix[0].size();
     std::vector<int> u_potential(n);
     std::vector<int> v_potential(m);
     std::vector<int> pairs(m);
@@ -64,8 +74,13 @@ std::vector<int> HungarianImpl(std::vector<std::vector<int>> matrix){
     }
 
     std::vector<int> ans (n);
-    for (int j = 0; j < m ; ++j)
-        ans[pairs[j]] = j - 1;
+    for (int j = 0; j < m ; ++j) {
+        if (j <= real_border) {
+            ans[pairs[j]] = j - 1;
+        } else {
+            ans[pairs[j]] = -1;
+        }
+    }
 
     ans.erase(ans.begin());
     return ans;
@@ -120,7 +135,7 @@ std::vector<std::pair<models::Order, models::ContractorsUnion>>
         std::cerr << "This solution are not optimized for current set of orders and contractors";
     }
 
-    const std::size_t iterations = M / N;
+    const std::size_t iterations = M / N + (M % N ? 1 : 0);
 
     std::unordered_map<std::string, models::ContractorsUnion> orders_map;
     for (std::size_t i = 0; i < iterations; ++i) {
@@ -129,6 +144,8 @@ std::vector<std::pair<models::Order, models::ContractorsUnion>>
         std::unordered_set<std::string> matched_candidates;
         for(std::size_t j = 0; j < result_pairs.size(); ++j){
             auto& order = orders[j];
+            if(result_pairs[j] == -1)
+                continue;
             auto& contractor = contractors[result_pairs[j]];
             matched_candidates.emplace(contractor.id);
             auto it = orders_map.find(order.id);
