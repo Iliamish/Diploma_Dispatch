@@ -1,0 +1,984 @@
+{
+    "orders": [
+        {
+            "candidates": [
+                {
+                    "id": "0515a586277747af94e55d027a2a640c_eab1b2c65d0513d1df7370f26cf87a62",
+                    "geo_point": [
+                        37.41326,
+                        55.889236
+                    ],
+                    "rd": 4244,
+                    "rt": 719,
+                    "score": 665,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "7f71e1b5eae640b083b4250ad57fc52a_3e7c8a064cc9da55fe357485794c63a1",
+                    "geo_point": [
+                        37.398279,
+                        55.911661
+                    ],
+                    "rd": 5527,
+                    "rt": 882,
+                    "score": 804,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "550083f9dc574f728b20cacd08549238_7d62434b385ce3561cbf082f20933d4b",
+                    "geo_point": [
+                        37.398277,
+                        55.911905
+                    ],
+                    "rd": 5565,
+                    "rt": 913,
+                    "score": 811,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a7d726b045774b0abb864064fa975877_7ede917467c542b6bd7f7b71222f5dd5",
+                    "geo_point": [
+                        37.403974,
+                        55.89837
+                    ],
+                    "rd": 4369,
+                    "rt": 765,
+                    "score": 651,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "115c501601de43418a701d359a0932ce_a9ff21e644a43c8568847adc5e52b2a4",
+                    "geo_point": [
+                        37.410473,
+                        55.899695
+                    ],
+                    "rd": 4382,
+                    "rt": 824,
+                    "score": 752,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "d2dea28cd0244aad845ca1541d2c9dbe_81c201023a963e154b6896bbfc03dac7",
+                    "geo_point": [
+                        37.412864,
+                        55.88726
+                    ],
+                    "rd": 3271,
+                    "rt": 778,
+                    "score": 664,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "017f1842b1764b60b2a9c622dc640d8e_e463c54e7f4a4e8a8d0a19f7a472ca6a",
+                    "geo_point": [
+                        37.398423,
+                        55.900312
+                    ],
+                    "rd": 5377,
+                    "rt": 901,
+                    "score": 857,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "4a0e7ef7e9ee401daf17a3d16c166756_f04a64b8db204f94aa7d4ad783f6b8d6",
+                    "geo_point": [
+                        37.401939,
+                        55.89769
+                    ],
+                    "rd": 3239,
+                    "rt": 468,
+                    "score": 612,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "d2dea28cd0244aad845ca1541d2c9dbe_81c201023a963e154b6896bbfc03dac7",
+                    "geo_point": [
+                        37.412864,
+                        55.88726
+                    ],
+                    "rd": 1914,
+                    "rt": 386,
+                    "score": 656,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "b56aad316b9047c38d952cc91a113fb6_499bd8d6e737c6d6817598aee6b9f28e",
+                    "geo_point": [
+                        37.423501,
+                        55.886156
+                    ],
+                    "rd": 3266,
+                    "rt": 460,
+                    "score": 789,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "73c9572289ed4afcba87689c72c6b3ac_e6dbaa5f1488590cddce412e0fef657a",
+                    "geo_point": [
+                        37.421036,
+                        55.879682
+                    ],
+                    "rd": 2093,
+                    "rt": 249,
+                    "score": 900,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "b1a90fc422e04e8bbbcc164d444ddfd7_22ee165746d04ab29d5157fdcbb782ff",
+                    "geo_point": [
+                        37.591158,
+                        55.826233
+                    ],
+                    "rd": 4339,
+                    "rt": 514,
+                    "score": 868,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a4f99228f820466ba3b86d8bdaefcb41_33c40f497b2a4da38c25688d6b10dd62",
+                    "geo_point": [
+                        37.608729,
+                        55.814794
+                    ],
+                    "rd": 3224,
+                    "rt": 376,
+                    "score": 701,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a11695e7e4e24ac9a946f7e5aec8bb9a_63e3ba635c999865c85312a01029c04f",
+                    "geo_point": [
+                        37.627012,
+                        55.820746
+                    ],
+                    "rd": 3457,
+                    "rt": 459,
+                    "score": 919,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "d448fdcb65a742dab264b16be87455c3_a597eaceb5f9f7b718ccd23f19aa8856",
+                    "geo_point": [
+                        37.638485,
+                        55.817719
+                    ],
+                    "rd": 3089,
+                    "rt": 442,
+                    "score": 832,
+                    "winner": false,
+                    "winner_applied": false
+                }
+            ],
+            "stats": {
+                "candidates_count": 7,
+                "geo_point": [
+                    37.45039588567636,
+                    55.89665528001139
+                ]
+            },
+            "retention_score": 450,
+            "allowed_classes": [
+                "econom"
+            ],
+            "id": "b8e365bd896030c4949246d39b8142a7"
+        },
+        {
+            "candidates": [
+                {
+                    "id": "4a0e7ef7e9ee401daf17a3d16c166756_f04a64b8db204f94aa7d4ad783f6b8d6",
+                    "geo_point": [
+                        37.401939,
+                        55.89769
+                    ],
+                    "rd": 3239,
+                    "rt": 468,
+                    "score": 412,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "d2dea28cd0244aad845ca1541d2c9dbe_81c201023a963e154b6896bbfc03dac7",
+                    "geo_point": [
+                        37.412864,
+                        55.88726
+                    ],
+                    "rd": 1914,
+                    "rt": 386,
+                    "score": 256,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "b56aad316b9047c38d952cc91a113fb6_499bd8d6e737c6d6817598aee6b9f28e",
+                    "geo_point": [
+                        37.423501,
+                        55.886156
+                    ],
+                    "rd": 3266,
+                    "rt": 460,
+                    "score": 406,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "73c9572289ed4afcba87689c72c6b3ac_e6dbaa5f1488590cddce412e0fef657a",
+                    "geo_point": [
+                        37.421036,
+                        55.879682
+                    ],
+                    "rd": 2093,
+                    "rt": 249,
+                    "score": 222,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "4ef8b56cbd7d442e89fbdc51ce4678f8_e9a10fe5ba3217a5f5e22c59523f0337",
+                    "geo_point": [
+                        37.416717,
+                        55.882331
+                    ],
+                    "rd": 2320,
+                    "rt": 282,
+                    "score": 246,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "6b7644a8ae0b44359833b6b824dd7757_e7d7749866e2460bb2f4a2dd2bed38ee",
+                    "geo_point": [
+                        37.414324,
+                        55.883804
+                    ],
+                    "rd": 1468,
+                    "rt": 173,
+                    "score": 117,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "ed493a841e19472db5319b8a146ef512_239bffb70015c587bada0530205c5324",
+                    "geo_point": [
+                        37.399863,
+                        55.898298
+                    ],
+                    "rd": 2859,
+                    "rt": 316,
+                    "score": 290,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "af3e25736e8d44099559eefaaa1bc789_51a62291cc964aa6acf5850fd1912e3f",
+                    "geo_point": [
+                        37.393448,
+                        55.899056
+                    ],
+                    "rd": 2523,
+                    "rt": 423,
+                    "score": 359,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "01856312487c4465b9fbeaad5dfed477_e43102c8222102d902f0ae93eb316290",
+                    "geo_point": [
+                        37.382951,
+                        55.886631
+                    ],
+                    "rd": 1897,
+                    "rt": 310,
+                    "score": 236,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "f069835e915e40ebae701ec65e5afc47_4d3bd6da03607edc1c42ed53d87b1444",
+                    "geo_point": [
+                        37.409419,
+                        55.89715
+                    ],
+                    "rd": 2802,
+                    "rt": 433,
+                    "score": 358,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "9e4904327b14426f8c1076c72992c057_b6789f5c639b208832916ddb6bce3041",
+                    "geo_point": [
+                        37.361979,
+                        55.888945
+                    ],
+                    "rd": 3138,
+                    "rt": 429,
+                    "score": 407,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "6ef85b43ed3748b68187a558b727b136_634deb73829f5b6edad9eaf5f2b20135",
+                    "geo_point": [
+                        37.386588,
+                        55.90001
+                    ],
+                    "rd": 2298,
+                    "rt": 372,
+                    "score": 335,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "3997096520c74f18b56f74dba9f0b33b_dc0a89bcad984e05b1e4e669ae60f23e",
+                    "geo_point": [
+                        37.43155,
+                        55.877784
+                    ],
+                    "rd": 2859,
+                    "rt": 409,
+                    "score": 425,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a7d162c788d4414db852152da0ae2af6_4b72fa8b3d5346aca18f55e449baf53b",
+                    "geo_point": [
+                        37.392081,
+                        55.88437
+                    ],
+                    "rd": 195,
+                    "rt": 97,
+                    "score": 200,
+                    "winner": true,
+                    "winner_applied": true
+                },
+                {
+                    "id": "d448fdcb65a742dab264b16be87455c3_a597eaceb5f9f7b718ccd23f19aa8856",
+                    "geo_point": [
+                        37.638485,
+                        55.817719
+                    ],
+                    "rd": 3089,
+                    "rt": 442,
+                    "score": 432,
+                    "winner": false,
+                    "winner_applied": false
+                }
+            ],
+            "stats": {
+                "candidates_count": 14,
+                "geo_point": [
+                    37.39421463012695,
+                    55.8852653503418
+                ]
+            },
+            "retention_score": 140,
+            "allowed_classes": [
+                "econom"
+            ],
+            "id": "15ee2e9e016a2fe3aef76a929771426d"
+        },
+        {
+            "candidates": [
+                {
+                    "id": "61b4e990a2cd42ee90869c2b9aae217a_aabbbe021d8a41dea732dfed86116bf9",
+                    "geo_point": [
+                        37.643831,
+                        55.823696
+                    ],
+                    "rd": 4031,
+                    "rt": 559,
+                    "score": 495,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "0688e19dfec64f75af3f75d8b9fba818_5be4d5f6ae1345ea869e52f0948e9ce8",
+                    "geo_point": [
+                        37.620106,
+                        55.815449
+                    ],
+                    "rd": 2189,
+                    "rt": 320,
+                    "score": 331,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "150cbd54c9494c7cb617088cc6da0adc_b7ebc1d69a03821bbc51c9477196d840",
+                    "geo_point": [
+                        37.638011,
+                        55.814015
+                    ],
+                    "rd": 2985,
+                    "rt": 445,
+                    "score": 405,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "355c4c28708a4749ae2e31835eb80be4_8c0395d51b664cd598147c47f045d5c0",
+                    "geo_point": [
+                        37.634933,
+                        55.796182
+                    ],
+                    "rd": 4084,
+                    "rt": 490,
+                    "score": 439,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "c9dbbed3efc8402fa5c5a3c88ad36dbb_8e3daa0393594784b88bbf8bda7354f4",
+                    "geo_point": [
+                        37.635203,
+                        55.794438
+                    ],
+                    "rd": 4326,
+                    "rt": 512,
+                    "score": 516,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "46394aab8f9c4cce9a0b739c87ca8234_7b724650951541d59e98c6096f6471ac",
+                    "geo_point": [
+                        37.617705,
+                        55.803165
+                    ],
+                    "rd": 1882,
+                    "rt": 431,
+                    "score": 278,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "462326a9e0d747618b6575b2e16aa1e9_7c527d1de0dc4f4081aeafb29ded56b4",
+                    "geo_point": [
+                        37.592751,
+                        55.826338
+                    ],
+                    "rd": 4340,
+                    "rt": 505,
+                    "score": 521,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "c9dbbed3efc8402fa5c5a3c88ad36dbb_3e6f7a251eaf464bbda8c1fab90dd6b9",
+                    "geo_point": [
+                        37.642445,
+                        55.797566
+                    ],
+                    "rd": 3977,
+                    "rt": 549,
+                    "score": 525,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "9aeb7689ff0c47e9acdf5d70445daf88_b620879dc7e54c68b8765b8fc89dfa3c",
+                    "geo_point": [
+                        37.620108,
+                        55.807105
+                    ],
+                    "rd": 2049,
+                    "rt": 495,
+                    "score": 430,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "42c7f8c3b42c44cf9b8ba7eef9a34656_9dd6ce85534402514faa9828758092d0",
+                    "geo_point": [
+                        37.617073,
+                        55.804171
+                    ],
+                    "rd": 1730,
+                    "rt": 355,
+                    "score": 294,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "cf027a527f404f81ab40c54dd68cb1e5_6f6c336f3fd645d498e092e0ecbf5ef8",
+                    "geo_point": [
+                        37.625364,
+                        55.793137
+                    ],
+                    "rd": 3309,
+                    "rt": 559,
+                    "score": 533,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "b1a90fc422e04e8bbbcc164d444ddfd7_22ee165746d04ab29d5157fdcbb782ff",
+                    "geo_point": [
+                        37.591158,
+                        55.826233
+                    ],
+                    "rd": 4339,
+                    "rt": 514,
+                    "score": 468,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a4f99228f820466ba3b86d8bdaefcb41_33c40f497b2a4da38c25688d6b10dd62",
+                    "geo_point": [
+                        37.608729,
+                        55.814794
+                    ],
+                    "rd": 3224,
+                    "rt": 376,
+                    "score": 301,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a11695e7e4e24ac9a946f7e5aec8bb9a_63e3ba635c999865c85312a01029c04f",
+                    "geo_point": [
+                        37.627012,
+                        55.820746
+                    ],
+                    "rd": 3457,
+                    "rt": 459,
+                    "score": 419,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "d448fdcb65a742dab264b16be87455c3_a597eaceb5f9f7b718ccd23f19aa8856",
+                    "geo_point": [
+                        37.638485,
+                        55.817719
+                    ],
+                    "rd": 3089,
+                    "rt": 442,
+                    "score": 432,
+                    "winner": false,
+                    "winner_applied": false
+                }
+            ],
+            "stats": {
+                "candidates_count": 17,
+                "geo_point": [
+                    37.61281128904517,
+                    55.80163622715977
+                ]
+            },
+            "retention_score": 240,
+            "allowed_classes": [
+                "econom"
+            ],
+            "id": "0335bf664e1dc8c497d702fedb9a25ea"
+        },
+        {
+            "candidates": [
+                {
+                    "id": "a11695e7e4e24ac9a946f7e5aec8bb9a_63e3ba635c999865c85312a01029c04f",
+                    "geo_point": [
+                        37.626575,
+                        55.820671
+                    ],
+                    "rd": 2368,
+                    "rt": 546,
+                    "score": 444,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "81053871aa314dea97831cfa24cd6fe0_08f966a92d0fc295266560856fb1397d",
+                    "geo_point": [
+                        37.626731,
+                        55.844526
+                    ],
+                    "rd": 2345,
+                    "rt": 401,
+                    "score": 354,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "0688e19dfec64f75af3f75d8b9fba818_5be4d5f6ae1345ea869e52f0948e9ce8",
+                    "geo_point": [
+                        37.620156,
+                        55.815907
+                    ],
+                    "rd": 2260,
+                    "rt": 575,
+                    "score": 494,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "f434953455af4784b3ebfd3bad5a4259_0f2f4ca20c8f49f89f9f3b83f9b95b35",
+                    "geo_point": [
+                        37.626536,
+                        55.848049
+                    ],
+                    "rd": 2738,
+                    "rt": 536,
+                    "score": 355,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "9488d6a1e37043d49cdb5bac140f4ca4_c6a0b3b4f1aa3f402666aad535608a87",
+                    "geo_point": [
+                        37.631849,
+                        55.838787
+                    ],
+                    "rd": 3148,
+                    "rt": 600,
+                    "score": 451,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "c39c80dcbd0a4a3c95f8c70fb35a6fc6_8fc16021a73e462db60780421d85022e",
+                    "geo_point": [
+                        37.626546,
+                        55.823927
+                    ],
+                    "rd": 2101,
+                    "rt": 574,
+                    "score": 448,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "f02d5744b7fc4722a097a5bb5d3e0989_eb41250a56e6de448a9c8315ec7642c8",
+                    "geo_point": [
+                        37.635611,
+                        55.847028
+                    ],
+                    "rd": 3280,
+                    "rt": 577,
+                    "score": 534,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "427fafe0e229429abc759711d4a95493_b416852afb0d2d11fc341657a790abc3",
+                    "geo_point": [
+                        37.631266,
+                        55.846601
+                    ],
+                    "rd": 2913,
+                    "rt": 501,
+                    "score": 404,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "9aeb7689ff0c47e9acdf5d70445daf88_b620879dc7e54c68b8765b8fc89dfa3c",
+                    "geo_point": [
+                        37.620108,
+                        55.807105
+                    ],
+                    "rd": 2049,
+                    "rt": 495,
+                    "score": 438,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "42c7f8c3b42c44cf9b8ba7eef9a34656_9dd6ce85534402514faa9828758092d0",
+                    "geo_point": [
+                        37.617073,
+                        55.804171
+                    ],
+                    "rd": 1730,
+                    "rt": 355,
+                    "score": 378,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "cf027a527f404f81ab40c54dd68cb1e5_6f6c336f3fd645d498e092e0ecbf5ef8",
+                    "geo_point": [
+                        37.625364,
+                        55.793137
+                    ],
+                    "rd": 3309,
+                    "rt": 559,
+                    "score": 467,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "b1a90fc422e04e8bbbcc164d444ddfd7_22ee165746d04ab29d5157fdcbb782ff",
+                    "geo_point": [
+                        37.591158,
+                        55.826233
+                    ],
+                    "rd": 4339,
+                    "rt": 514,
+                    "score": 399,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a4f99228f820466ba3b86d8bdaefcb41_33c40f497b2a4da38c25688d6b10dd62",
+                    "geo_point": [
+                        37.608729,
+                        55.814794
+                    ],
+                    "rd": 3224,
+                    "rt": 376,
+                    "score": 520,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a11695e7e4e24ac9a946f7e5aec8bb9a_63e3ba635c999865c85312a01029c04f",
+                    "geo_point": [
+                        37.627012,
+                        55.820746
+                    ],
+                    "rd": 3457,
+                    "rt": 459,
+                    "score": 489,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "d448fdcb65a742dab264b16be87455c3_a597eaceb5f9f7b718ccd23f19aa8856",
+                    "geo_point": [
+                        37.638485,
+                        55.817719
+                    ],
+                    "rd": 3089,
+                    "rt": 442,
+                    "score": 453,
+                    "winner": false,
+                    "winner_applied": false
+                }
+            ],
+            "stats": {
+                "candidates_count": 8,
+                "geo_point": [
+                    37.61937276096451,
+                    55.83234290568458
+                ]
+            },
+            "retention_score": 240,
+            "allowed_classes": [
+                "econom"
+            ],
+            "id": "0729d9a3effac6069e25464f24fc3fe0"
+        },
+        {
+            "candidates": [
+                {
+                    "id": "09278fb61950433baa43aa34550f103d_8db602adf65e44e7a8cef3764ccf390b",
+                    "geo_point": [
+                        37.960795,
+                        55.789713
+                    ],
+                    "rd": 1753,
+                    "rt": 304,
+                    "score": 251,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "4dfb26101d7142a084d3bc8f31386cb1_bcd7c0498fda4cc82738238374f33500",
+                    "geo_point": [
+                        37.969073,
+                        55.79627
+                    ],
+                    "rd": 830,
+                    "rt": 147,
+                    "score": 78,
+                    "winner": true,
+                    "winner_applied": true
+                },
+                {
+                    "id": "9b125e9683484f2e852dc729c9fd0afc_d08493965b334d54be24ff07dabe6742",
+                    "geo_point": [
+                        37.979182,
+                        55.79526
+                    ],
+                    "rd": 1979,
+                    "rt": 404,
+                    "score": 332,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "e4de3315a41b458eb89cd69b1f437f30_3079f6e9860a42a8181f09d78924a9c9",
+                    "geo_point": [
+                        37.942101,
+                        55.793881
+                    ],
+                    "rd": 3013,
+                    "rt": 414,
+                    "score": 391,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "3ead35692a78411797fb414e3ea80222_abe41893f1a507e58bbca0862d0419fa",
+                    "geo_point": [
+                        37.923729,
+                        55.79295
+                    ],
+                    "rd": 3783,
+                    "rt": 346,
+                    "score": 284,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "2c32c0a25ba44efbb8d34b2b5dd18e91_fabe4a3a07e1e2aef88dbc858ef795d9",
+                    "geo_point": [
+                        37.966114,
+                        55.790228
+                    ],
+                    "rd": 535,
+                    "rt": 202,
+                    "score": 124,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "3d3ea4b5a944437a85def498dff811d5_7ff5cecc43e3ed5b7c317b904a999f8c",
+                    "geo_point": [
+                        37.948229,
+                        55.793464
+                    ],
+                    "rd": 2286,
+                    "rt": 332,
+                    "score": 279,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "c88ee03b408d419790903a9c401e65fe_4ca392ee528f30e4491f7b4e24d4fb4f",
+                    "geo_point": [
+                        37.973014,
+                        55.793423
+                    ],
+                    "rd": 696,
+                    "rt": 172,
+                    "score": 141,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "844b2c272a0049e3a6860dd620ca2d72_1d40ca5c5c518f2f38f3eb4c8dcccde9",
+                    "geo_point": [
+                        37.953731,
+                        55.793024
+                    ],
+                    "rd": 2069,
+                    "rt": 417,
+                    "score": 316,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "0688e19dfec64f75af3f75d8b9fba818_6a093dfd8adc49f3a7745558e40060c3",
+                    "geo_point": [
+                        37.903194,
+                        55.79257
+                    ],
+                    "rd": 5028,
+                    "rt": 376,
+                    "score": 408,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "5373419627834614bfc06bb159fb505b_c4088f75900b7dc487382a67da08772e",
+                    "geo_point": [
+                        37.947206,
+                        55.794595
+                    ],
+                    "rd": 2459,
+                    "rt": 276,
+                    "score": 237,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "c786cdfaad3746fbaa53dcc16c92cd09_184c46469fdb4830aa41fa8d3f1f25cc",
+                    "geo_point": [
+                        37.944097,
+                        55.794092
+                    ],
+                    "rd": 2715,
+                    "rt": 396,
+                    "score": 374,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "cf027a527f404f81ab40c54dd68cb1e5_6f6c336f3fd645d498e092e0ecbf5ef8",
+                    "geo_point": [
+                        37.625364,
+                        55.793137
+                    ],
+                    "rd": 3309,
+                    "rt": 559,
+                    "score": 469,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "b1a90fc422e04e8bbbcc164d444ddfd7_22ee165746d04ab29d5157fdcbb782ff",
+                    "geo_point": [
+                        37.591158,
+                        55.826233
+                    ],
+                    "rd": 4339,
+                    "rt": 514,
+                    "score": 436,
+                    "winner": false,
+                    "winner_applied": false
+                },
+                {
+                    "id": "a4f99228f820466ba3b86d8bdaefcb41_33c40f497b2a4da38c25688d6b10dd62",
+                    "geo_point": [
+                        37.608729,
+                        55.814794
+                    ],
+                    "rd": 3224,
+                    "rt": 376,
+                    "score": 420,
+                    "winner": false,
+                    "winner_applied": false
+                }
+            ],
+            "stats": {
+                "candidates_count": 12,
+                "geo_point": [
+                    37.96286090658209,
+                    55.79274056106414
+                ]
+            },
+            "retention_score": 140,
+            "allowed_classes": [
+                "econom"
+            ],
+            "id": "77a86c390baddc1c960a612a4620fc32"
+        }
+        ]
+    }

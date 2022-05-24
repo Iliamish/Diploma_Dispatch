@@ -106,7 +106,7 @@ namespace imitation {
 
 std::chrono::milliseconds ImitateEasy() {
     models::Graph graph;
-    BuildData("data2.json", graph);
+    BuildData("data/data5_15_85_10.json", graph);
 
     std::size_t iteration{0};
 
@@ -155,7 +155,7 @@ std::chrono::milliseconds ImitateEasy() {
 
 std::chrono::milliseconds ImitateIterative() {
     models::Graph graph;
-    BuildData("data2.json", graph);
+    BuildData("data/data5_15_85_10.json", graph);
 
     std::size_t iteration{0};
     auto s_time = std::chrono::steady_clock::now();
@@ -218,7 +218,7 @@ std::chrono::milliseconds ImitateIterative() {
 
 std::chrono::milliseconds ImitateGreedy() {
     models::Graph graph;
-    BuildData("data2.json", graph);
+    BuildData("data/data5_15_85_10.json", graph);
 
     std::size_t iteration{0};
     auto s_time = std::chrono::steady_clock::now();
