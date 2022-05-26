@@ -6,10 +6,12 @@
 
 namespace imitation {
 
-    std::chrono::milliseconds ImitateEasy();
+    std::chrono::milliseconds ImitateEasy(std::string path);
 
-    std::chrono::milliseconds ImitateIterative();
+    std::chrono::milliseconds ImitateEasyWithAR(std::string path);
 
-    std::chrono::milliseconds ImitateGreedy();
+    std::chrono::milliseconds ImitateIterative(std::string path);
+
+    std::chrono::milliseconds ImitateGreedy(std::string path);
 
 }

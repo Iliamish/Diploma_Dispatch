@@ -7,4 +7,6 @@ namespace utils {
 
     Json::Value ParseFile(const char* inputFile);
 
+    void FillData();
+
 }

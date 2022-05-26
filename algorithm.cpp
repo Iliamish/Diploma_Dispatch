@@ -109,13 +109,39 @@ std::vector<std::vector<int>> PreprocessMatrix(const models::Graph& graph) {
     return result;
 }
 
+std::vector<std::vector<int>> PreprocessMatrixWithAR(const models::Graph& graph) {
+    std::unordered_map<std::string, std::size_t> contractors_map;
+    const std::size_t N = graph.orders.size();
+    const std::size_t M = graph.contractors.size();
+
+    for (std::size_t j = 0; j < M; ++j) {
+        contractors_map.emplace(graph.contractors[j].id, j);
+    }
+
+    std::vector<std::vector<int>> result(N, std::vector<int>(M, INF));
+    for (std::size_t i = 0; i < N; ++i) {
+        for(const auto& edge_to_contractor : graph.orders[i].edges_to_contractors) {
+            const std::size_t j = contractors_map.at(edge_to_contractor.to_id);
+            result[i][j] = edge_to_contractor.weight * (1 / edge_to_contractor.acceptance_rate);
+        }
+    }
+
+    return result;
+}
+
 }
 
 namespace algorithm {
 
 std::vector<std::pair<models::Order, models::Contractor>>
-    SolveEasyHungarian(const models::Graph& graph){
-    const auto preproced_matrix = PreprocessMatrix(graph);
+    SolveEasyHungarian(const models::Graph& graph, bool use_ar){
+    std::vector<std::vector<int>> preproced_matrix;
+
+    if (use_ar) {
+        preproced_matrix = PreprocessMatrixWithAR(graph);
+    } else {
+        preproced_matrix = PreprocessMatrix(graph);
+    }
     const auto result_pairs = HungarianImpl(preproced_matrix);
 
     std::vector<std::pair<models::Order, models::Contractor>> orders_contractors;
@@ -175,6 +201,11 @@ std::vector<std::pair<models::Order, models::ContractorsUnion>>
         orders_contractors.push_back({order, orders_map.at(order.id)});
     }
     return orders_contractors;
+}
+
+std::vector<std::pair<models::Order, models::ContractorsUnion>>
+    SolveHungarianPreprocessedUnions(models::Graph graph) {
+
 }
 
 std::vector<std::pair<models::Order, models::ContractorsUnion>>

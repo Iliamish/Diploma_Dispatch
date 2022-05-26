@@ -104,9 +104,9 @@ namespace {
 
 namespace imitation {
 
-std::chrono::milliseconds ImitateEasy() {
+std::chrono::milliseconds ImitateEasy(std::string path) {
     models::Graph graph;
-    BuildData("data/data5_15_85_10.json", graph);
+    BuildData(path, graph);
 
     std::size_t iteration{0};
 
@@ -116,7 +116,7 @@ std::chrono::milliseconds ImitateEasy() {
     {
         std::cout << "* Iteration " << iteration << " *"<< std::endl;
 
-        auto result = algorithm::SolveEasyHungarian(graph);
+        auto result = algorithm::SolveEasyHungarian(graph, false);
 
         std::vector<bool> propose_results(result.size());
         std::vector<std::thread> proposes;
@@ -153,9 +153,58 @@ std::chrono::milliseconds ImitateEasy() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
 }
 
-std::chrono::milliseconds ImitateIterative() {
+std::chrono::milliseconds ImitateEasyWithAR(std::string path) {
     models::Graph graph;
-    BuildData("data/data5_15_85_10.json", graph);
+    BuildData(path, graph);
+
+    std::size_t iteration{0};
+
+    auto s_time = std::chrono::steady_clock::now();
+
+    while (!graph.orders.empty())
+    {
+        std::cout << "* Iteration " << iteration << " *"<< std::endl;
+
+        auto result = algorithm::SolveEasyHungarian(graph, true);
+
+        std::vector<bool> propose_results(result.size());
+        std::vector<std::thread> proposes;
+        for (std::size_t i = 0; i < result.size(); ++i) {
+            auto& pair = result[i];
+            proposes.emplace_back(std::thread([&, i]{
+                if(ProposeOrderToDriver(pair.first, pair.second)){
+                    propose_results[i] = true;
+                } else {
+                    propose_results[i] = false;
+                }
+            }));
+        }
+
+        for(auto& propose : proposes){
+                propose.join();
+        }
+
+        for (std::size_t i = 0; i < result.size(); ++i) {
+            auto& pair = result[i];
+            std::cout << pair.first.id << " -- " << pair.second.id << std::endl;
+            if (propose_results[i]) {
+                std::cout << "Accepted" << std::endl;
+                RemoveOrderAndContractorFromGraph(graph, pair.first.id, pair.second.id);
+            } else {
+                std::cout << "Declined" << std::endl;
+                RemoveEdge(graph, pair.first.id, pair.second.id);
+            }
+        }
+        ++iteration;
+    }
+
+    auto elapsed_time = std::chrono::steady_clock::now() - s_time;
+    return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+}
+
+std::chrono::milliseconds ImitateIterative(std::string path) {
+    models::Graph graph;
+    BuildData(path, graph);
 
     std::size_t iteration{0};
     auto s_time = std::chrono::steady_clock::now();
@@ -184,7 +233,7 @@ std::chrono::milliseconds ImitateIterative() {
             }
         }
         for(auto& propose : proposes){
-                propose.join();
+            propose.join();
         }
 
         for (std::size_t i = 0; i < result.size(); ++i) {
@@ -216,9 +265,9 @@ std::chrono::milliseconds ImitateIterative() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
 }
 
-std::chrono::milliseconds ImitateGreedy() {
+std::chrono::milliseconds ImitateGreedy(std::string path) {
     models::Graph graph;
-    BuildData("data/data5_15_85_10.json", graph);
+    BuildData(path, graph);
 
     std::size_t iteration{0};
     auto s_time = std::chrono::steady_clock::now();
@@ -248,7 +297,7 @@ std::chrono::milliseconds ImitateGreedy() {
         }
 
         for(auto& propose : proposes){
-                propose.join();
+            propose.join();
         }
 
         for (std::size_t i = 0; i < result.size(); ++i) {
