@@ -18,6 +18,13 @@ namespace utils {
         return val;
     }
 
+    void WriteFile(Json::Value value, const char* outputFile) {
+        std::ofstream myfile(outputFile);
+        Json::StyledWriter styledWriter;
+        myfile << styledWriter.write(value);
+        myfile.close();
+    }
+
     void FillData() {
         std::vector<std::string> drivers {
             "0515a586277747af94e55d027a2a640c_eab1b2c65d0513d1df7370f26cf87a62",

@@ -86,8 +86,9 @@ std::vector<int> HungarianImpl(std::vector<std::vector<int>> matrix){
     return ans;
 }
 
-// std::vector<models::ContractorsUnion> PreprocessUnions(std::string order_id);
+// std::vector<models::ContractorsUnion> PreprocessUnions(const models::Graph& graph) {
 
+// }
 
 std::vector<std::vector<int>> PreprocessMatrix(const models::Graph& graph) {
     std::unordered_map<std::string, std::size_t> contractors_map;
@@ -203,10 +204,10 @@ std::vector<std::pair<models::Order, models::ContractorsUnion>>
     return orders_contractors;
 }
 
-std::vector<std::pair<models::Order, models::ContractorsUnion>>
-    SolveHungarianPreprocessedUnions(models::Graph graph) {
+// std::vector<std::pair<models::Order, models::ContractorsUnion>>
+//     SolveHungarianPreprocessedUnions(models::Graph graph) {
 
-}
+// }
 
 std::vector<std::pair<models::Order, models::ContractorsUnion>>
     SolveGreedy(models::Graph graph) {

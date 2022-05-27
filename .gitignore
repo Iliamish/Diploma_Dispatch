@@ -1,4 +1,5 @@
 .vscode/
 build/
+results/
 *.docx
 trash.cpp
