@@ -27,12 +27,17 @@ namespace models {
     
     struct ContractorsUnion
     {
-        double acceptance_rate;
+        std::string id;
         std::vector<Contractor> contractors;
     };
 
     struct Graph {
         std::vector<Order> orders;
         std::vector<Contractor> contractors;
+    };
+
+    struct GraphWithUnions {
+        std::vector<Order> orders;
+        std::vector<ContractorsUnion> contractors;
     };
 }

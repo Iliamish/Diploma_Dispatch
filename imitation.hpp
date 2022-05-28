@@ -14,4 +14,6 @@ namespace imitation {
 
     std::chrono::milliseconds ImitateGreedy(std::string path);
 
+    std::chrono::milliseconds ImitateHungarianUnions(std::string path);
+
 }

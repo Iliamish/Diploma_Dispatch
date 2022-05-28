@@ -8,7 +8,7 @@ namespace algorithm {
         SolveEasyHungarian(const models::Graph& graph, bool use_ar);
 
     std::vector<std::pair<models::Order, models::ContractorsUnion>>
-        SolveHungarianUnions(models::Graph graph);
+        SolveHungarianIterative(models::Graph graph);
     
     std::vector<std::pair<models::Order, models::ContractorsUnion>>
         SolveHungarianPreprocessedUnions(models::Graph graph);

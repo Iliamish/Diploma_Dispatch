@@ -9,6 +9,8 @@ namespace utils {
 
     void WriteFile(Json::Value value, const char* outputFile);
 
+    void WriteFileCSV(Json::Value value, const char* outputFile);
+
     void FillData();
 
 }

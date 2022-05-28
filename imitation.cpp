@@ -10,6 +10,8 @@
 
 
 namespace {
+    const std::chrono::milliseconds kNetworkDelay {1};
+
     void BuildData(std::string path, models::Graph& graph) {
         auto json_value = utils::ParseFile(path.c_str());
         std::unordered_set<std::string> candidates_set;
@@ -44,7 +46,8 @@ namespace {
         static std::random_device rd{};
         static std::mt19937 gen{rd()};
         auto p = gen() % 100;
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        auto wait_time =  std::chrono::milliseconds(gen() % 8 + 2);
+        std::this_thread::sleep_for(2 * kNetworkDelay + wait_time);
         return it->acceptance_rate * 100 > p;
     }
 
@@ -100,6 +103,108 @@ namespace {
         RemoveContractorFromGraph(graph, contractor_id);
         RemoveOrderFromGraph(graph, order_id);
     }
+
+    template <typename Algo>
+    void ImitatePairs(models::Graph& graph, Algo algo, bool with_ar){
+        std::size_t iteration{0};
+
+        while (!graph.orders.empty())
+        {
+            std::cout << "* Iteration " << iteration << " *"<< std::endl;
+
+            auto result = algo(graph, with_ar);
+
+            std::vector<bool> propose_results(result.size());
+            std::vector<std::thread> proposes;
+            for (std::size_t i = 0; i < result.size(); ++i) {
+                auto& pair = result[i];
+                proposes.emplace_back(std::thread([&, i]{
+                    if(ProposeOrderToDriver(pair.first, pair.second)){
+                        propose_results[i] = true;
+                    } else {
+                        propose_results[i] = false;
+                    }
+                }));
+            }
+
+            for(auto& propose : proposes){
+                    propose.join();
+            }
+
+            for (std::size_t i = 0; i < result.size(); ++i) {
+                auto& pair = result[i];
+                std::cout << pair.first.id << " -- " << pair.second.id << std::endl;
+                if (propose_results[i]) {
+                    std::cout << "Accepted" << std::endl;
+                    RemoveOrderAndContractorFromGraph(graph, pair.first.id, pair.second.id);
+                } else {
+                    std::cout << "Declined" << std::endl;
+                    RemoveEdge(graph, pair.first.id, pair.second.id);
+                }
+            }
+            ++iteration;
+        }
+    }
+
+    template <typename Algo>
+    void ImitateWithUnions(models::Graph& graph, Algo algo){
+        std::size_t iteration{0};
+        while (!graph.orders.empty())
+        {
+            std::cout << "* Iteration " << iteration << " *"<< std::endl;
+
+            auto result = algo(graph);
+
+            std::vector<std::thread> proposes;
+            std::vector<std::vector<bool>> propose_results(result.size());
+            for (std::size_t i = 0; i < result.size(); ++i) {
+                auto& pair = result[i];
+                propose_results[i] = (std::vector<bool>(pair.second.contractors.size()));
+                for(std::size_t j = 0; j < pair.second.contractors.size(); ++j) {
+                    auto candidate = pair.second.contractors[j];
+                    auto order = GetOrderById(graph, pair.first.id);
+                    proposes.emplace_back(std::thread([=, &propose_results]{
+                        if(ProposeOrderToDriver(order, candidate)){
+                            propose_results[i][j] = true;
+                        } else {
+                            propose_results[i][j] = false;
+                        }
+                    }));
+                }
+            }
+
+            for(auto& propose : proposes){
+                propose.join();
+            }
+
+            for (std::size_t i = 0; i < result.size(); ++i) {
+                auto& pair = result[i];
+                std::cout << "Order: " << pair.first.id << std::endl;
+                bool any_accept = false;
+                for(std::size_t j = 0; j < pair.second.contractors.size(); ++j) {
+                    auto candidate = pair.second.contractors[j];
+                    std::cout << candidate.id;
+                    if (propose_results[i][j]) {
+                        std::cout << " - Accepted" << std::endl;
+                        if(!any_accept){
+                            RemoveContractorFromGraph(graph, candidate.id);
+                            any_accept = true;
+                        }
+                    } else {
+                        std::cout << " - Declined" << std::endl;
+                        RemoveEdge(graph, pair.first.id, candidate.id);
+                    }
+                }
+
+                if (any_accept) {
+                    RemoveOrderFromGraph(graph, pair.first.id);
+                }
+                std::cout << std::endl;
+            }
+            ++iteration;
+        }
+
+    }
 }
 
 namespace imitation {
@@ -108,46 +213,9 @@ std::chrono::milliseconds ImitateEasy(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
 
-    std::size_t iteration{0};
-
     auto s_time = std::chrono::steady_clock::now();
 
-    while (!graph.orders.empty())
-    {
-        std::cout << "* Iteration " << iteration << " *"<< std::endl;
-
-        auto result = algorithm::SolveEasyHungarian(graph, false);
-
-        std::vector<bool> propose_results(result.size());
-        std::vector<std::thread> proposes;
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            proposes.emplace_back(std::thread([&, i]{
-                if(ProposeOrderToDriver(pair.first, pair.second)){
-                    propose_results[i] = true;
-                } else {
-                    propose_results[i] = false;
-                }
-            }));
-        }
-
-        for(auto& propose : proposes){
-                propose.join();
-        }
-
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            std::cout << pair.first.id << " -- " << pair.second.id << std::endl;
-            if (propose_results[i]) {
-                std::cout << "Accepted" << std::endl;
-                RemoveOrderAndContractorFromGraph(graph, pair.first.id, pair.second.id);
-            } else {
-                std::cout << "Declined" << std::endl;
-                RemoveEdge(graph, pair.first.id, pair.second.id);
-            }
-        }
-        ++iteration;
-    }
+    ImitatePairs(graph, algorithm::SolveEasyHungarian, false);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
     return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
@@ -157,46 +225,9 @@ std::chrono::milliseconds ImitateEasyWithAR(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
 
-    std::size_t iteration{0};
-
     auto s_time = std::chrono::steady_clock::now();
 
-    while (!graph.orders.empty())
-    {
-        std::cout << "* Iteration " << iteration << " *"<< std::endl;
-
-        auto result = algorithm::SolveEasyHungarian(graph, true);
-
-        std::vector<bool> propose_results(result.size());
-        std::vector<std::thread> proposes;
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            proposes.emplace_back(std::thread([&, i]{
-                if(ProposeOrderToDriver(pair.first, pair.second)){
-                    propose_results[i] = true;
-                } else {
-                    propose_results[i] = false;
-                }
-            }));
-        }
-
-        for(auto& propose : proposes){
-                propose.join();
-        }
-
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            std::cout << pair.first.id << " -- " << pair.second.id << std::endl;
-            if (propose_results[i]) {
-                std::cout << "Accepted" << std::endl;
-                RemoveOrderAndContractorFromGraph(graph, pair.first.id, pair.second.id);
-            } else {
-                std::cout << "Declined" << std::endl;
-                RemoveEdge(graph, pair.first.id, pair.second.id);
-            }
-        }
-        ++iteration;
-    }
+    ImitatePairs(graph, algorithm::SolveEasyHungarian, true);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
     return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
@@ -206,60 +237,9 @@ std::chrono::milliseconds ImitateIterative(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
 
-    std::size_t iteration{0};
     auto s_time = std::chrono::steady_clock::now();
 
-    while (!graph.orders.empty())
-    {
-        std::cout << "* Iteration " << iteration << " *"<< std::endl;
-
-        auto result = algorithm::SolveHungarianUnions(graph);
-
-        std::vector<std::thread> proposes;
-        std::vector<std::vector<bool>> propose_results(result.size());
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            propose_results[i] = (std::vector<bool>(pair.second.contractors.size()));
-            for(std::size_t j = 0; j < pair.second.contractors.size(); ++j) {
-                auto candidate = pair.second.contractors[j];
-                auto order = GetOrderById(graph, pair.first.id);
-                proposes.emplace_back(std::thread([=, &propose_results]{
-                    if(ProposeOrderToDriver(order, candidate)){
-                        propose_results[i][j] = true;
-                    } else {
-                        propose_results[i][j] = false;
-                    }
-                }));
-            }
-        }
-        for(auto& propose : proposes){
-            propose.join();
-        }
-
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            std::cout << "Order: " << pair.first.id << std::endl;
-            for(std::size_t j = 0; j < pair.second.contractors.size(); ++j) {
-                auto candidate = pair.second.contractors[j];
-                std::cout << candidate.id;
-                if (propose_results[i][j]) {
-                    std::cout << " - Accepted" << std::endl;
-                    RemoveContractorFromGraph(graph, candidate.id);
-                } else {
-                    std::cout << " - Declined" << std::endl;
-                    RemoveEdge(graph, pair.first.id, candidate.id);
-                }
-            }
-            bool any_accept =
-                    std::any_of(std::begin(propose_results[i]), std::end(propose_results[i]),
-                            [](bool i) { return i;});
-            if (any_accept) {
-                RemoveOrderFromGraph(graph, pair.first.id);
-            }
-            std::cout << std::endl;
-        }
-        ++iteration;
-    }
+    ImitateWithUnions(graph, algorithm::SolveHungarianIterative);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
     return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
@@ -269,61 +249,21 @@ std::chrono::milliseconds ImitateGreedy(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
 
-    std::size_t iteration{0};
     auto s_time = std::chrono::steady_clock::now();
 
-    while (!graph.orders.empty())
-    {
-        std::cout << "* Iteration " << iteration << " *"<< std::endl;
+    ImitateWithUnions(graph, algorithm::SolveGreedy);
 
-        auto result = algorithm::SolveGreedy(graph);
+    auto elapsed_time = std::chrono::steady_clock::now() - s_time;
+    return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+}
 
-        std::vector<std::thread> proposes;
-        std::vector<std::vector<bool>> propose_results(result.size());
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            propose_results[i] = (std::vector<bool>(pair.second.contractors.size()));
-            for(std::size_t j = 0; j < pair.second.contractors.size(); ++j) {
-                auto candidate = pair.second.contractors[j];
-                auto order = GetOrderById(graph, pair.first.id);
-                proposes.emplace_back(std::thread([=, &propose_results]{
-                    if(ProposeOrderToDriver(order, candidate)){
-                        propose_results[i][j] = true;
-                    } else {
-                        propose_results[i][j] = false;
-                    }
-                }));
-            }
-        }
+std::chrono::milliseconds ImitateHungarianUnions(std::string path) {
+    models::Graph graph;
+    BuildData(path, graph);
 
-        for(auto& propose : proposes){
-            propose.join();
-        }
+    auto s_time = std::chrono::steady_clock::now();
 
-        for (std::size_t i = 0; i < result.size(); ++i) {
-            auto& pair = result[i];
-            std::cout << "Order: " << pair.first.id << std::endl;
-            for(std::size_t j = 0; j < pair.second.contractors.size(); ++j) {
-                auto candidate = pair.second.contractors[j];
-                std::cout << candidate.id;
-                if (propose_results[i][j]) {
-                    std::cout << " - Accepted" << std::endl;
-                    RemoveContractorFromGraph(graph, candidate.id);
-                } else {
-                    std::cout << " - Declined" << std::endl;
-                    RemoveEdge(graph, pair.first.id, candidate.id);
-                }
-            }
-            bool any_accept =
-                    std::any_of(std::begin(propose_results[i]), std::end(propose_results[i]),
-                            [](bool i) { return i;});
-            if (any_accept) {
-                RemoveOrderFromGraph(graph, pair.first.id);
-            }
-            std::cout << std::endl;
-        }
-        ++iteration;
-    }
+    ImitateWithUnions(graph, algorithm::SolveHungarianPreprocessedUnions);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
     return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <optional>
 
 #include "algorithm.hpp"
 #define INF 1000000
@@ -86,11 +87,66 @@ std::vector<int> HungarianImpl(std::vector<std::vector<int>> matrix){
     return ans;
 }
 
-// std::vector<models::ContractorsUnion> PreprocessUnions(const models::Graph& graph) {
+std::optional<models::Edge> FindEdge(const models::Order& order, std::string contractor_id) {
+    auto& edges = order.edges_to_contractors;
+    auto it = std::find_if(edges.begin(), edges.end(),
+    [contractor_id](const models::Edge& value){
+        return contractor_id == value.to_id;
+    });
+    if(it != edges.end()){
+        return (*it);
+    }else{
+        return std::nullopt;
+    }
+}
 
-// }
+models::GraphWithUnions PreprocessUnions(const models::Graph& graph) {
+    const std::size_t N = graph.orders.size();
 
-std::vector<std::vector<int>> PreprocessMatrix(const models::Graph& graph) {
+    std::vector<models::ContractorsUnion> unions(N);
+
+    std::size_t counter = 0;
+    for(const auto& contractor: graph.contractors) {
+        unions[counter].contractors.push_back(contractor);
+        if(unions[counter].id.empty()){
+            unions[counter].id = std::to_string(counter);
+        }
+        ++counter;
+        counter %= N;
+    }
+
+    std::vector<models::Order> orders_with_new_edges;
+
+    for(const auto& order : graph.orders) {
+        models::Order new_order;
+        new_order.id = order.id;
+        for(const auto& co_union : unions) {
+            models::Edge new_edge;
+            new_edge.to_id = co_union.id;
+            new_edge.acceptance_rate = 1;
+            for(const auto& contractor: co_union.contractors) {
+                auto old_edge = FindEdge(order, contractor.id);
+                if(old_edge){
+                    new_edge.acceptance_rate *= (1 - old_edge->acceptance_rate);
+                    new_edge.weight +=  (1 / old_edge->acceptance_rate) * old_edge->weight;
+                }
+            }
+            new_edge.acceptance_rate = 1 - new_edge.acceptance_rate;
+            new_edge.weight /= co_union.contractors.size();
+            new_order.edges_to_contractors.push_back(new_edge);
+        }
+        orders_with_new_edges.push_back(new_order);
+    }
+
+    models::GraphWithUnions new_graph;
+    new_graph.orders = orders_with_new_edges;
+    new_graph.contractors = unions;
+
+    return new_graph;
+}
+
+template <typename Graph>
+std::vector<std::vector<int>> PreprocessMatrix(const Graph& graph) {
     std::unordered_map<std::string, std::size_t> contractors_map;
     const std::size_t N = graph.orders.size();
     const std::size_t M = graph.contractors.size();
@@ -153,7 +209,7 @@ std::vector<std::pair<models::Order, models::Contractor>>
 }
 
 std::vector<std::pair<models::Order, models::ContractorsUnion>>
-    SolveHungarianUnions(models::Graph graph) {
+    SolveHungarianIterative(models::Graph graph) {
     std::vector<models::Order>& orders = graph.orders;
     std::vector<models::Contractor>& contractors = graph.contractors;
     const std::size_t N = orders.size();
@@ -204,10 +260,22 @@ std::vector<std::pair<models::Order, models::ContractorsUnion>>
     return orders_contractors;
 }
 
-// std::vector<std::pair<models::Order, models::ContractorsUnion>>
-//     SolveHungarianPreprocessedUnions(models::Graph graph) {
+std::vector<std::pair<models::Order, models::ContractorsUnion>>
+    SolveHungarianPreprocessedUnions(models::Graph graph) {
+    auto new_graph = PreprocessUnions(graph);
 
-// }
+    std::vector<std::vector<int>> preproced_matrix;
+
+    preproced_matrix = PreprocessMatrix(new_graph);
+
+    const auto result_pairs = HungarianImpl(preproced_matrix);
+
+    std::vector<std::pair<models::Order, models::ContractorsUnion>> orders_contractors;
+    for(std::size_t i = 0; i < result_pairs.size(); ++i){
+        orders_contractors.push_back({new_graph.orders[i], new_graph.contractors[result_pairs[i]]});
+    }
+    return orders_contractors;
+}
 
 std::vector<std::pair<models::Order, models::ContractorsUnion>>
     SolveGreedy(models::Graph graph) {
