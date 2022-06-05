@@ -186,6 +186,18 @@ std::vector<std::vector<int>> PreprocessMatrixWithAR(const models::Graph& graph)
     return result;
 }
 
+models::ContractorsUnion SolveOneOrder(models::Order order){
+    std::sort(order.edges_to_contractors.begin(), order.edges_to_contractors.end(),
+            [](const models::Edge& edge1, const models::Edge& edge2){
+                return edge1.weight < edge2.weight;
+            });
+    models::ContractorsUnion contractors_union;
+    for(auto edge: order.edges_to_contractors){
+        contractors_union.contractors.push_back(models::Contractor{edge.to_id});
+    }
+    return contractors_union;
+}
+
 }
 
 namespace algorithm {
@@ -221,36 +233,41 @@ std::vector<std::pair<models::Order, models::ContractorsUnion>>
     const std::size_t iterations = M / N + (M % N ? 1 : 0);
 
     std::unordered_map<std::string, models::ContractorsUnion> orders_map;
-    for (std::size_t i = 0; i < iterations; ++i) {
-        const auto preproced_matrix = PreprocessMatrix(graph);
-        const auto result_pairs = HungarianImpl(preproced_matrix);
-        std::unordered_set<std::string> matched_candidates;
-        for(std::size_t j = 0; j < result_pairs.size(); ++j){
-            auto& order = orders[j];
-            if(result_pairs[j] == -1)
-                continue;
-            auto& contractor = contractors[result_pairs[j]];
-            matched_candidates.emplace(contractor.id);
-            auto it = orders_map.find(order.id);
-            if (it != orders_map.end()) {
-                orders_map[order.id].contractors.push_back(contractor);
-            }else{
-                models::ContractorsUnion contractors_union;
-                contractors_union.contractors.push_back(contractor);
-                orders_map.emplace(order.id, contractors_union);
+
+    if(N == 1){
+        orders_map.emplace(orders.back().id, SolveOneOrder(orders.back()));
+    } else {
+        for (std::size_t i = 0; i < iterations; ++i) {
+            const auto preproced_matrix = PreprocessMatrix(graph);
+            const auto result_pairs = HungarianImpl(preproced_matrix);
+            std::unordered_set<std::string> matched_candidates;
+            for(std::size_t j = 0; j < result_pairs.size(); ++j){
+                auto& order = orders[j];
+                if(result_pairs[j] == -1)
+                    continue;
+                auto& contractor = contractors[result_pairs[j]];
+                matched_candidates.emplace(contractor.id);
+                auto it = orders_map.find(order.id);
+                if (it != orders_map.end()) {
+                    orders_map[order.id].contractors.push_back(contractor);
+                }else{
+                    models::ContractorsUnion contractors_union;
+                    contractors_union.contractors.push_back(contractor);
+                    orders_map.emplace(order.id, contractors_union);
+                }
             }
+            for(auto& order : orders) {
+                auto& edges = order.edges_to_contractors;
+                edges.erase(std::remove_if(edges.begin(), edges.end(),
+                [&matched_candidates](const models::Edge& value){
+                    return matched_candidates.find(value.to_id) != matched_candidates.end();
+                }), edges.end());
+            }
+            contractors.erase(std::remove_if(contractors.begin(), contractors.end(),
+                [&matched_candidates](const models::Contractor& value){
+                    return matched_candidates.find(value.id) != matched_candidates.end();
+                }), contractors.end());
         }
-        for(auto& order : orders) {
-            auto& edges = order.edges_to_contractors;
-            edges.erase(std::remove_if(edges.begin(), edges.end(),
-            [&matched_candidates](const models::Edge& value){
-                return matched_candidates.find(value.to_id) != matched_candidates.end();
-            }), edges.end());
-        }
-        contractors.erase(std::remove_if(contractors.begin(), contractors.end(),
-            [&matched_candidates](const models::Contractor& value){
-                return matched_candidates.find(value.id) != matched_candidates.end();
-            }), contractors.end());
     }
 
     std::vector<std::pair<models::Order, models::ContractorsUnion>> orders_contractors;
@@ -283,45 +300,49 @@ std::vector<std::pair<models::Order, models::ContractorsUnion>>
     std::vector<models::Contractor>& contractors = graph.contractors;
 
     std::unordered_map<std::string, models::ContractorsUnion> orders_map;
-    for(auto& order : orders) {
-        std::sort(order.edges_to_contractors.begin(), order.edges_to_contractors.end(),
-            [](const models::Edge& edge1, const models::Edge& edge2){
-                return edge1.weight > edge2.weight;
-            });
-        models::ContractorsUnion contractors_union;
-        orders_map.emplace(order.id, contractors_union);
-    }
 
-    std::unordered_set<std::string> free_candidates;
-    for(auto& contractor : contractors) {
-        free_candidates.emplace(contractor.id);
-    }
-
-    bool at_least_one = true;
-    while(free_candidates.size() > 0 && at_least_one) {
-        at_least_one = false;
+    if(orders.size() == 1){
+        orders_map.emplace(orders.back().id, SolveOneOrder(orders.back()));
+    } else {
         for(auto& order : orders) {
-            if(!order.edges_to_contractors.empty()) {
-                at_least_one = true;
-                auto candidate = order.edges_to_contractors.back();
-                bool found = true;
-                while(free_candidates.find(candidate.to_id) == free_candidates.end()){
-                    order.edges_to_contractors.pop_back();
-                    if(order.edges_to_contractors.empty()){
-                        found = false;
-                        break;
+            std::sort(order.edges_to_contractors.begin(), order.edges_to_contractors.end(),
+                [](const models::Edge& edge1, const models::Edge& edge2){
+                    return edge1.weight > edge2.weight;
+                });
+            models::ContractorsUnion contractors_union;
+            orders_map.emplace(order.id, contractors_union);
+        }
+
+        std::unordered_set<std::string> free_candidates;
+        for(auto& contractor : contractors) {
+            free_candidates.emplace(contractor.id);
+        }
+
+        bool at_least_one = true;
+        while(free_candidates.size() > 0 && at_least_one) {
+            at_least_one = false;
+            for(auto& order : orders) {
+                if(!order.edges_to_contractors.empty()) {
+                    at_least_one = true;
+                    auto candidate = order.edges_to_contractors.back();
+                    bool found = true;
+                    while(free_candidates.find(candidate.to_id) == free_candidates.end()){
+                        order.edges_to_contractors.pop_back();
+                        if(order.edges_to_contractors.empty()){
+                            found = false;
+                            break;
+                        }
+                        candidate = order.edges_to_contractors.back();
                     }
-                    candidate = order.edges_to_contractors.back();
-                }
-                if(found){
-                    orders_map[order.id].contractors.push_back(models::Contractor{candidate.to_id});
-                    order.edges_to_contractors.pop_back();
-                    free_candidates.erase(candidate.to_id);
+                    if(found){
+                        orders_map[order.id].contractors.push_back(models::Contractor{candidate.to_id});
+                        order.edges_to_contractors.pop_back();
+                        free_candidates.erase(candidate.to_id);
+                    }
                 }
             }
         }
     }
-
     std::vector<std::pair<models::Order, models::ContractorsUnion>> orders_contractors;
     for(const auto& order : orders){
         orders_contractors.push_back({order, orders_map.at(order.id)});

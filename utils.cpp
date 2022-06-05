@@ -26,9 +26,10 @@ namespace utils {
     }
 
     void WriteFileCSV(Json::Value value, const char* outputFile) {
-        std::ofstream myfile(outputFile);
+        std::ofstream myfile(outputFile, std::ios_base::app);
         for(auto val : value["results"]){
-            myfile << std::stoi(val["time"].asString()) << "\n";
+            myfile << std::stoi(val["time"].asString())<< ","
+                << std::stoi(val["score"].asString()) << "\n";
         }
         myfile.close();
     }

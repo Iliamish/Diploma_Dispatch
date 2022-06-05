@@ -3,17 +3,18 @@
 #include <chrono>
 
 #include "algorithm.hpp"
+#include "models.hpp"
 
 namespace imitation {
 
-    std::chrono::milliseconds ImitateEasy(std::string path);
+    models::ImitataionResult ImitateEasy(std::string path);
 
-    std::chrono::milliseconds ImitateEasyWithAR(std::string path);
+    models::ImitataionResult ImitateEasyWithAR(std::string path);
 
-    std::chrono::milliseconds ImitateIterative(std::string path);
+    models::ImitataionResult ImitateIterative(std::string path);
 
-    std::chrono::milliseconds ImitateGreedy(std::string path);
+    models::ImitataionResult ImitateGreedy(std::string path);
 
-    std::chrono::milliseconds ImitateHungarianUnions(std::string path);
+    models::ImitataionResult ImitateHungarianUnions(std::string path);
 
 }

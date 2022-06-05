@@ -10,8 +10,6 @@
 
 
 namespace {
-    const std::chrono::milliseconds kNetworkDelay {1};
-
     void BuildData(std::string path, models::Graph& graph) {
         auto json_value = utils::ParseFile(path.c_str());
         std::unordered_set<std::string> candidates_set;
@@ -46,8 +44,9 @@ namespace {
         static std::random_device rd{};
         static std::mt19937 gen{rd()};
         auto p = gen() % 100;
-        auto wait_time =  std::chrono::milliseconds(gen() % 8 + 2);
-        std::this_thread::sleep_for(2 * kNetworkDelay + wait_time);
+        auto wait_time =  std::chrono::milliseconds(5000 + gen() % 5000);
+        std::chrono::milliseconds kNetworkDelay {10 + gen() % 40};
+        std::this_thread::sleep_for(2 * (kNetworkDelay) + wait_time);
         return it->acceptance_rate * 100 > p;
     }
 
@@ -64,9 +63,22 @@ namespace {
         return (*order);
     }
 
+    std::optional<models::Edge> FindEdge(const models::Order& order, std::string contractor_id) {
+        auto& edges = order.edges_to_contractors;
+        auto it = std::find_if(edges.begin(), edges.end(),
+        [contractor_id](const models::Edge& value){
+            return contractor_id == value.to_id;
+        });
+        if(it != edges.end()){
+            return (*it);
+        }else{
+            return std::nullopt;
+        }
+    }
+
     void RemoveEdge(models::Graph& graph,
                     std::string order_id, std::string contractor_id) {
-        auto order = GetOrderById(graph, order_id);
+        auto& order = GetOrderById(graph, order_id);
         auto& edges = order.edges_to_contractors;
         edges.erase(std::remove_if(edges.begin(), edges.end(),
         [contractor_id](const models::Edge& value){
@@ -105,9 +117,9 @@ namespace {
     }
 
     template <typename Algo>
-    void ImitatePairs(models::Graph& graph, Algo algo, bool with_ar){
+    std::size_t ImitatePairs(models::Graph& graph, Algo algo, bool with_ar){
         std::size_t iteration{0};
-
+        std::size_t score = 0;
         while (!graph.orders.empty())
         {
             std::cout << "* Iteration " << iteration << " *"<< std::endl;
@@ -136,6 +148,13 @@ namespace {
                 std::cout << pair.first.id << " -- " << pair.second.id << std::endl;
                 if (propose_results[i]) {
                     std::cout << "Accepted" << std::endl;
+                    auto order = GetOrderById(graph, pair.first.id);
+                    auto edge = FindEdge(order, pair.second.id);
+                    if(edge){
+                        score += edge->weight;
+                    }else{
+                        throw std::exception();
+                    }
                     RemoveOrderAndContractorFromGraph(graph, pair.first.id, pair.second.id);
                 } else {
                     std::cout << "Declined" << std::endl;
@@ -144,11 +163,13 @@ namespace {
             }
             ++iteration;
         }
+        return score;
     }
 
     template <typename Algo>
-    void ImitateWithUnions(models::Graph& graph, Algo algo){
+    std::size_t ImitateWithUnions(models::Graph& graph, Algo algo){
         std::size_t iteration{0};
+        std::size_t score = 0;
         while (!graph.orders.empty())
         {
             std::cout << "* Iteration " << iteration << " *"<< std::endl;
@@ -187,6 +208,13 @@ namespace {
                     if (propose_results[i][j]) {
                         std::cout << " - Accepted" << std::endl;
                         if(!any_accept){
+                            auto order = GetOrderById(graph, pair.first.id);
+                            auto edge = FindEdge(order, candidate.id);
+                            if(edge){
+                                score += edge->weight;
+                            }else{
+                                throw std::exception();
+                            }
                             RemoveContractorFromGraph(graph, candidate.id);
                             any_accept = true;
                         }
@@ -203,70 +231,80 @@ namespace {
             }
             ++iteration;
         }
-
+        return score;
     }
 }
 
 namespace imitation {
 
-std::chrono::milliseconds ImitateEasy(std::string path) {
+models::ImitataionResult ImitateEasy(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
+    models::ImitataionResult im_res;
 
     auto s_time = std::chrono::steady_clock::now();
 
-    ImitatePairs(graph, algorithm::SolveEasyHungarian, false);
+    im_res.score = ImitatePairs(graph, algorithm::SolveEasyHungarian, false);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
-    return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    im_res.time = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    return im_res;
 }
 
-std::chrono::milliseconds ImitateEasyWithAR(std::string path) {
+models::ImitataionResult ImitateEasyWithAR(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
+    models::ImitataionResult im_res;
 
     auto s_time = std::chrono::steady_clock::now();
 
-    ImitatePairs(graph, algorithm::SolveEasyHungarian, true);
+    im_res.score = ImitatePairs(graph, algorithm::SolveEasyHungarian, true);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
-    return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    im_res.time = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    return im_res;
 }
 
-std::chrono::milliseconds ImitateIterative(std::string path) {
+models::ImitataionResult ImitateIterative(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
+    models::ImitataionResult im_res;
 
     auto s_time = std::chrono::steady_clock::now();
 
-    ImitateWithUnions(graph, algorithm::SolveHungarianIterative);
+    im_res.score = ImitateWithUnions(graph, algorithm::SolveHungarianIterative);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
-    return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    im_res.time = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    return im_res;
 }
 
-std::chrono::milliseconds ImitateGreedy(std::string path) {
+models::ImitataionResult ImitateGreedy(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
+    models::ImitataionResult im_res;
 
     auto s_time = std::chrono::steady_clock::now();
 
-    ImitateWithUnions(graph, algorithm::SolveGreedy);
+    im_res.score = ImitateWithUnions(graph, algorithm::SolveGreedy);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
-    return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    im_res.time = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    return im_res;
 }
 
-std::chrono::milliseconds ImitateHungarianUnions(std::string path) {
+models::ImitataionResult ImitateHungarianUnions(std::string path) {
     models::Graph graph;
     BuildData(path, graph);
+    models::ImitataionResult im_res;
 
     auto s_time = std::chrono::steady_clock::now();
 
-    ImitateWithUnions(graph, algorithm::SolveHungarianPreprocessedUnions);
+    im_res.score = ImitateWithUnions(graph, algorithm::SolveHungarianPreprocessedUnions);
 
     auto elapsed_time = std::chrono::steady_clock::now() - s_time;
-    return std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    im_res.time = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed_time);
+    return im_res;
 }
 
 }

@@ -40,4 +40,10 @@ namespace models {
         std::vector<Order> orders;
         std::vector<ContractorsUnion> contractors;
     };
+
+    struct ImitataionResult {
+        std::chrono::milliseconds time {0};
+        std::unordered_map<std::string, std::string> pairs;
+        std::size_t score {0};
+    };
 }
